@@ -7,13 +7,19 @@
 
 Kube eagle is a prometheus exporter which exports various metrics of kubernetes pod resource requests, limits and it's actual usages. It was created with the purpose to provide a better overview of your kubernetes cluster resources, so that you can optimize the resource allocation. You can easily build, or use our default grafana dashboard which will help you to achieve this goal:
 
-![Grafana Dashboard for Kubernetes resource monitoring](https://raw.githubusercontent.com/google-cloud-tools/kube-eagle/master/grafana-sample.png)
+![Grafana Dashboard for Kubernetes resource monitoring](https://raw.githubusercontent.com/liorfranko/kube-eagle/master/grafana-sample.png)
+## Forked
+This is a fork of https://github.com/cloudworkz/kube-eagle
 
+It has one additional feature of adding the `node-group` label to all metrics.
+This is useful for EKS deployments and allows filtering by node-groups.
+![Grafana Dashboard for Kubernetes resource monitoring](https://raw.githubusercontent.com/liorfranko/kube-eagle/master/grafana-sample-all.png)
+![Grafana Dashboard for Kubernetes resource monitoring](https://raw.githubusercontent.com/liorfranko/kube-eagle/master/grafana-sample-filtered.png)
 ## Setup
 
 Simply deploy a pod which runs kube-eagle inside the kubernetes cluster you would like to monitor. We recommend using our provided helm chart to deploy kube eagle in your cluster:
 
-Kube eagle helm chart: https://github.com/cloudworkz/kube-eagle-helm-chart
+Kube eagle for EKS helm chart: https://github.com/liorfranko/kube-eagle-eks-helm-chart
 
 **Note:** [Metrics-server](https://github.com/kubernetes-incubator/metrics-server) is a prerequisite for Kube Eagle to work. Most managed Kubernetes clusters come with metrics-server installed by default - you can find the associated helm chart in the helm [stable repo](https://github.com/helm/charts/tree/master/stable/metrics-server).
 
@@ -30,12 +36,12 @@ Make sure the pod has a service account attached that has the required permissio
 | METRICS_NAMESPACE | Prefix of exposed prometheus metrics | eagle |
 | IS_IN_CLUSTER | Whether to use in cluster communication or to look for a kubeconfig in home directory | true |
 | LOG_LEVEL | Logger's log granularity (debug, info, warn, error, fatal, panic) | info |
+| ENABLE_LABELS | Add pod's labels to  eagle_pod_container metrics | false |
 
 ### Configure Grafana dashboard
 
-1. Import the dashboard: https://grafana.com/dashboards/9871 (Dashboard ID 9871)
+1. Import the dashboard: https://grafana.com/grafana/dashboards/15463 (Dashboard ID 15463)
 
-2. Configure Dashboard variables: Open the Kube Eagle dashboard and click the gear icon at the top to configure the dashboard. On the left menu you should see a setting called "Variables". Since we don't have an explicit label for nodepools (yet) we rely on given node names which usually carry the nodepool name in it. Thus provide the full "node name prefix" including the nodepool name (e. g. `gke-brawlstats-k8s-highmem-.*` where as highmem is the nodepool name).
 
 ## Exposed metrics
 
